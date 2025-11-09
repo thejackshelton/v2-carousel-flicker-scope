@@ -1,0 +1,142 @@
+@layer qds {
+  [ui-qds-carousel-prev-trigger][ui-disabled],
+  [ui-qds-carousel-next-trigger][ui-disabled] {
+    cursor: not-allowed;
+  }
+
+  [ui-qds-carousel-viewport] {
+    overflow: hidden;
+  }
+
+  [ui-qds-carousel-scroll-area] {
+    will-change: transform;
+    /* Default snap animation - can be overridden with CSS custom properties */
+    /* Example: --snap-duration: 500ms; --snap-easing: cubic-bezier(0.4, 0, 0.2, 1); */
+    --snap-duration: 250ms;
+    --snap-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: var(--snap-duration) transform var(--snap-easing);
+    contain: layout;
+
+    display: flex;
+    gap: var(--gap);
+    flex-direction: var(--orientation);
+
+    /* for initial item position */
+    scroll-snap-type: both mandatory;
+    max-height: calc(var(--max-item-height));
+  }
+
+  [ui-qds-carousel-item] {
+    /* default, feel free to override */
+    --total-gap-width: calc(var(--gap) * (var(--items-per-view) - 1));
+    --available-item-width: calc(100% - var(--total-gap-width));
+    --item-width: calc(var(--available-item-width) / var(--items-per-view));
+
+    flex-basis: var(--item-width);
+    flex-shrink: 0;
+    position: relative;
+    user-select: none;
+  }
+
+  [ui-qds-carousel-scroll-area][ui-initial] {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [ui-qds-carousel-player] {
+      display: none;
+    }
+  }
+
+  /* workaround until scroll-snap-start is added to CSS */
+  [ui-qds-scroll-start] {
+    --remove-flex-gap: calc(-1 * var(--gap));
+    clip-path: inset(50%);
+    height: 0;
+    width: 0;
+    white-space: nowrap;
+    visibility: hidden;
+    display: none;
+    position: relative;
+  }
+
+  /* should not affect padding on non-scroller carousels */
+  [ui-qds-carousel-scroll-area] [ui-qds-scroll-start] {
+    display: revert;
+  }
+
+  /* Offsetting the scroll-start - Horizontal orientation */
+  [ui-qds-carousel-scroll-area][ui-horizontal] [ui-qds-scroll-start][ui-start] {
+    margin-right: var(--remove-flex-gap);
+  }
+
+  [ui-qds-carousel-scroll-area][ui-horizontal] [ui-qds-scroll-start][ui-end] {
+    margin-left: var(--remove-flex-gap);
+  }
+
+  /* Vertical orientation (remove start gap) */
+  [ui-qds-carousel-scroll-area][ui-vertical] [ui-qds-scroll-start][ui-start] {
+    margin-top: var(--remove-flex-gap);
+  }
+
+  [ui-qds-carousel-scroll-area][ui-vertical] [ui-qds-scroll-start][ui-end] {
+    margin-bottom: var(--remove-flex-gap);
+  }
+
+  [ui-qds-scroll-start]::before {
+    content: "";
+    height: 1px;
+    width: 1px;
+    display: block;
+    position: absolute;
+    /* changes to none on first interaction */
+    scroll-snap-align: var(--scroll-snap-align, start);
+  }
+
+  /* position the marker to the start - Horizontal */
+  [ui-qds-carousel-scroll-area][ui-horizontal] [ui-qds-scroll-start][ui-start]::before {
+    left: 0;
+    top: 0;
+  }
+
+  /* position the marker to the end - Horizontal */
+  [ui-qds-carousel-scroll-area][ui-horizontal] [ui-qds-scroll-start][ui-end]::before {
+    right: 0;
+    top: 0;
+  }
+
+  /* position the marker to the start - Vertical */
+  [ui-qds-carousel-scroll-area][ui-vertical] [ui-qds-scroll-start][ui-start]::before {
+    left: 0;
+    top: 0;
+  }
+
+  /* position the marker to the end - Vertical */
+  [ui-qds-carousel-scroll-area][ui-vertical] [ui-qds-scroll-start][ui-end]::before {
+    left: 0;
+    bottom: 0;
+  }
+
+  /* center horizontally - Horizontal orientation */
+  [ui-qds-carousel-scroll-area][ui-horizontal] [ui-qds-scroll-start][ui-center]::before {
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
+  /* center vertically - Vertical orientation */
+  [ui-qds-carousel-scroll-area][ui-vertical] [ui-qds-scroll-start][ui-center]::before {
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* remove the marker's snap-align on hover */
+  [ui-qds-carousel-scroll-area]:hover [ui-qds-scroll-start]::before {
+    scroll-snap-align: unset;
+  }
+
+  [ui-initial] [hidden] {
+    display: none;
+  }
+}

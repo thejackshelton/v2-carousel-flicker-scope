@@ -1,25 +1,34 @@
-import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { Carousel } from "@qds.dev/ui";
+import { component$, useSignal } from "@qwik.dev/core";
 
 export default component$(() => {
+  const colors = ["red", "green", "blue", "yellow", "purple", "orange", "pink"];
+
+  const selectedSlide = useSignal("yellow");
+
   return (
-    <>
-      <h1>Hi 👋</h1>
-      <div>
-        Can't wait to see what you build with qwik!
-        <br />
-        Happy coding.
-      </div>
-    </>
+    <Carousel.Root bind:value={selectedSlide}>
+      <Carousel.ScrollArea>
+        {colors.map((color) => (
+          <Carousel.Item
+            value={color}
+            key={color}
+            style={{
+              backgroundColor: color,
+            }}
+          >
+            {color}
+          </Carousel.Item>
+        ))}
+      </Carousel.ScrollArea>
+
+      <Carousel.NavList>
+        {colors.map((color) => (
+          <Carousel.NavTrigger key={color}>{color}</Carousel.NavTrigger>
+        ))}
+      </Carousel.NavList>
+
+      <p>Selected slide: {selectedSlide.value}</p>
+    </Carousel.Root>
   );
 });
-
-export const head: DocumentHead = {
-  title: "Welcome to Qwik",
-  meta: [
-    {
-      name: "description",
-      content: "Qwik site description",
-    },
-  ],
-};
