@@ -76,57 +76,23 @@ export const CarouselItem = component$((props: CarouselItemProps) => {
   });
 
   return (
-    <>
-      <ScrollMarker align="start" index={index} value={itemValue} />
-      <div
-        {...rest}
-        ref={itemRef}
-        id={itemId}
-        inert={!isVisible.value}
-        hidden={isInactive.value}
-        aria-roledescription="slide"
-        role={
-          context.navTriggerRefsArray.value.length > 0 ? "tabpanel" : undefined
-        }
-        ui-qds-carousel-item
-        ui-qds-scope
-        ui-current={isVisible.value ? "" : undefined}
-        aria-label={`${index + 1} of ${context.totalItems.value}`}
-        onFocusIn$={[handleFocusIn$, rest.onFocusIn$]}
-      >
-        <Slot />
-        <ScrollMarker align="center" index={index} value={itemValue} />
-      </div>
-      <ScrollMarker align="end" index={index} value={itemValue} />
-    </>
-  );
-});
-
-type ScrollMarkerProps = PropsOf<"div"> & {
-  align: "start" | "center" | "end";
-  index: number;
-  value: string;
-};
-
-const ScrollMarker = component$((props: ScrollMarkerProps) => {
-  const context = useContext(carouselContextId);
-
-  const { align, index, value, ...rest } = props;
-
-  const isVisible = useComputed$(
-    () =>
-      context.startValue === value &&
-      context.currentIndex.value === index &&
-      context.align.value === align
-  );
-
-  return (
     <div
-      ref={context.scrollStartRef}
-      ui-qds-scroll-start
-      hidden={!isVisible.value}
-      {...{ [`ui-${align}`]: "" }}
       {...rest}
-    />
+      ref={itemRef}
+      id={itemId}
+      inert={!isVisible.value}
+      hidden={isInactive.value}
+      aria-roledescription="slide"
+      role={
+        context.navTriggerRefsArray.value.length > 0 ? "tabpanel" : undefined
+      }
+      ui-qds-carousel-item
+      ui-qds-scope
+      ui-current={isVisible.value ? "" : undefined}
+      aria-label={`${index + 1} of ${context.totalItems.value}`}
+      onFocusIn$={[handleFocusIn$, rest.onFocusIn$]}
+    >
+      <Slot />
+    </div>
   );
 });
