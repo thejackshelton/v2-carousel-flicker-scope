@@ -15,6 +15,7 @@ export default component$(() => {
             key={color}
             style={{
               backgroundColor: color,
+              height: "100px",
             }}
           >
             {color}
