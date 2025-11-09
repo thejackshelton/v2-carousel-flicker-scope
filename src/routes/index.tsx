@@ -1,4 +1,4 @@
-import { Carousel } from "@qds.dev/ui";
+import { Carousel } from "../components/carousel";
 import { component$, useSignal } from "@qwik.dev/core";
 
 export default component$(() => {

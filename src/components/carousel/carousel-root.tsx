@@ -12,8 +12,6 @@ import {
   useSignal,
   useTask$,
 } from "@qwik.dev/core";
-import { Render } from "../render/render";
-import { useAutoplay } from "./hooks/use-autoplay";
 import { getIndexFromValue, getValueFromIndex } from "./carousel-utils";
 
 export const carouselContextId = createContextId<CarouselContext>(
