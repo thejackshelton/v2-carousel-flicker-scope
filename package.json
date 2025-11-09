@@ -25,7 +25,6 @@
   "devDependencies": {
     "@eslint/js": "latest",
     "@qds.dev/ui": "^0.5.14",
-    "@qds.dev/utils": "^0.5.14",
     "@qwik.dev/core": "2.0.0-beta.13",
     "@qwik.dev/router": "2.0.0-beta.13",
     "@types/node": "20.19.0",

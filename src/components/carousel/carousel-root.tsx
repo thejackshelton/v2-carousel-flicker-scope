@@ -1,4 +1,3 @@
-import { BindableProps, useBindings } from "@qds.dev/utils";
 import {
   component$,
   createContextId,
@@ -93,11 +92,6 @@ export type PublicCarouselRootProps = PropsOf<"div"> & {
   mousewheel?: boolean;
 
   onChange?: (value: string) => void;
-} & BindableProps<CarouselBinds>;
-
-type CarouselBinds = {
-  value: string;
-  autoplay: boolean;
 };
 
 export const CarouselRoot = component$((props: PublicCarouselRootProps) => {
@@ -120,13 +114,8 @@ export const CarouselRoot = component$((props: PublicCarouselRootProps) => {
   const currItemIndex = 0;
   const currNavTriggerIndex = 0;
 
-  const { valueSig: currentValue, autoplaySig: isAutoplay } = useBindings(
-    props,
-    {
-      value: "0",
-      autoplay: false,
-    }
-  );
+  const currentValue = useSignal(0);
+  const isAutoplay = useSignal(false);
 
   const isScroller = useSignal(false);
 

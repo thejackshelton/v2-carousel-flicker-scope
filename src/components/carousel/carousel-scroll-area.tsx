@@ -1,4 +1,3 @@
-import { useDebouncer, useResumed$ } from "@qds.dev/utils";
 import {
   $,
   component$,
@@ -10,6 +9,7 @@ import {
   useSignal,
   useStyles$,
   useTask$,
+  useVisibleTask$,
 } from "@qwik.dev/core";
 import { isServer } from "@qwik.dev/core/build";
 import styles from "./carousel.css?inline";
@@ -191,7 +191,6 @@ export const CarouselScrollArea = component$((props: PropsOf<"div">) => {
     await setTransition(false);
   });
 
-  const debouncedUpdate = useDebouncer(setTransform, 1);
   const handleTouchMove = $(async (e: TouchEvent) => {
     if (isMouseDown.value || startPos.value === undefined) return;
     if (!context.scrollAreaRef.value || !boundaries.value) return;
@@ -207,7 +206,7 @@ export const CarouselScrollArea = component$((props: PropsOf<"div">) => {
       newTransform <= boundaries.value.max
     ) {
       transform.value[direction] = newTransform;
-      await debouncedUpdate();
+      await setTransform();
     }
 
     startPos.value = pos;
@@ -245,6 +244,11 @@ export const CarouselScrollArea = component$((props: PropsOf<"div">) => {
     initialLoad.value = false;
   });
 
+  // leaving this here for now we can remove later
+  useVisibleTask$(() => {
+    setInitialItemPos();
+  });
+
   // This only works because we don't need to serialize refs or signals
   let touchStartX = 0;
   let touchStartY = 0;
@@ -279,12 +283,6 @@ export const CarouselScrollArea = component$((props: PropsOf<"div">) => {
       e.preventDefault();
     } else if (isVertical && deltaY > deltaX && deltaY > 5) {
       e.preventDefault();
-    }
-  });
-
-  useResumed$(() => {
-    if (isNewPosOnLoad.value) {
-      void setInitialItemPos();
     }
   });
 
